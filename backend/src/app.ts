@@ -7,4 +7,6 @@ app.get("/", async(req, res) => {
     console.log(result)
 });
 
+
+
 export default app;
