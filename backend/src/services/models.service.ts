@@ -21,13 +21,12 @@ export const cohereModel = new ChatCohere({
 });
 
 
-export const generateTitle=async(message:string)=>{
+export const generateTitle=async(message:any)=>{
 
-    const prompt=`Generate a title for the following message: ${message}
-    make it shorter in 2-3 words
-    only return the title
-    and generate like a real chatGPT
-    `
+   const prompt = `
+Generate a title for the following message: ${message}
+Only 2-3 words, plain text, no quotes, no formatting.
+`;
 
     const response=await mistralmodel.invoke([
             new HumanMessage(prompt)

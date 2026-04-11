@@ -1,12 +1,16 @@
 import express from "express";
-import graph from "./services/graph.ai.service.js"
+import cookieParser from "cookie-parser"
+import authRouter from "./routes/auth.route.js"
+import chatRouter from "./routes/chat.route.js"
+import ErrorMiddleware from "./middleware/Error.middleware.js";
 const app = express();
 app.use(express.json())
-app.get("/", async(req, res) => {
-    const result=await graph()
-    console.log(result)
-});
+app.use(cookieParser())
+
+app.use("/api/auth",authRouter)
+app.use("/api/chat",chatRouter)
 
 
+app.use(ErrorMiddleware)
 
 export default app;

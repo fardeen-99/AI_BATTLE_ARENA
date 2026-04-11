@@ -1,7 +1,7 @@
 import usermodel from "../models/user.model.js"
 import jwt from "jsonwebtoken"
 import { type Request, type Response } from "express"
-
+import {configuration} from "../config/config.js"
 interface RegisterBody {
   username: string
   email: string
@@ -35,7 +35,7 @@ export const registerUser=async(req:Request<{}, {}, RegisterBody>,res:Response)=
     password,
   })
 
-  const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET!,{expiresIn:"7d"})
+  const token=jwt.sign({id:newUser._id},configuration.jwt_secret,{expiresIn:"7d"})
 
   res.cookie("token",token,{
     httpOnly:true,
@@ -75,7 +75,7 @@ export const loginUser=async(req:Request<{}, {}, LoginBody>,res:Response)=>{
         return res.status(400).json({message:"Invalid password"})
     }
 
-    const token=jwt.sign({id:user._id},process.env.JWT_SECRET!,{expiresIn:"7d"})
+    const token=jwt.sign({id:user._id},configuration.jwt_secret,{expiresIn:"7d"})
 
     res.cookie("token",token,{
         httpOnly:true,
@@ -105,8 +105,11 @@ export const getme=async(req:Request,res:Response)=>{
         return res.status(404).json({message:"User not found"})
     }
     res.status(200).json({
-        _id:user._id,
-        username:user.username,
-        email:user.email
+        user:{
+            _id:user._id,
+            username:user.username,
+            email:user.email
+
+        }
     })
 }
