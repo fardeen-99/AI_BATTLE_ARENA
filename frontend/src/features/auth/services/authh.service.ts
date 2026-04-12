@@ -8,37 +8,21 @@ const API=axios.create({
 
 
 export const Register=async(form:RegisterForm)=>{
-    try {
-        const res=await API.post("/auth/register",form)
-        return res.data
-    } catch (error) {
-        console.log(error)
-    }
+    const res=await API.post("/auth/register",form)
+    return res.data
 }
 
 export const Login=async(form:LoginForm)=>{
-    try {
-        const res=await API.post("/auth/login",form)
-        return res.data
-    } catch (error) {
-        console.log(error)
-    }
+    const res=await API.post("/auth/login",form)
+    return res.data
 }
 
 export const Logout=async()=>{
-    try {
-        const res=await API.post("/auth/logout")
-        return res.data
-    } catch (error) {
-        console.log(error)
-    }
+    const res=await API.post("/auth/logout")
+    return res.data
 }
 
 export const GetMe=async()=>{
-    try {
-        const res=await API.get("/auth/me")
-        return res.data
-    } catch (error) {
-        console.log(error)
-    }
-}
+    const res=await API.get("/auth/me")
+    return res.data
+}

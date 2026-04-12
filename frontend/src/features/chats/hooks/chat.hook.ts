@@ -9,15 +9,7 @@ const dispatch:AppDispatch=useDispatch()
 
 const handleSendMessage=async(message:string,chatId:string)=>{
     try {
-        // dispatch(addmessage({
-        //     question:message,
-        //     solution_1:"",
-        //     solution_2:"",
-        //     solution_1_score:0,
-        //     solution_2_score:0,
-        //     solution_1_reason:"",
-        //     solution_2_reason:"",
-        // }))
+        dispatch(setError(null))
         dispatch(setLoading(true))
         if (!chatId) {
             dispatch(setMessages([]))
@@ -32,7 +24,8 @@ const handleSendMessage=async(message:string,chatId:string)=>{
                 solution_2_score: res.response.AI_judgement.solution_2_score,
                 solution_1_reason: res.response.AI_judgement.solution_1_reason,
                 solution_2_reason: res.response.AI_judgement.solution_2_reason,
-            }
+            },
+            _id:res._id
         })
     )
     if (res.title) {
@@ -40,8 +33,9 @@ const handleSendMessage=async(message:string,chatId:string)=>{
     }
     dispatch(setCurrentChat(res.chatId))
     }
-    catch(error){
-        dispatch(setError(error))
+    catch(error: any){
+        const message = error.response?.data?.message || error.message || "Failed to send message"
+        dispatch(setError(message))
     }finally{
         dispatch(setLoading(false))
     }
@@ -50,12 +44,14 @@ const handleSendMessage=async(message:string,chatId:string)=>{
 
 const handleGetChats=async()=>{
     try {
+        dispatch(setError(null))
         dispatch(setLoading(true))
         const res=await GetChats()
         dispatch(setChats(res.chats))
     }
-    catch(error){
-        dispatch(setError(error))
+    catch(error: any){
+        const message = error.response?.data?.message || error.message || "Failed to fetch chats"
+        dispatch(setError(message))
     }finally{
         dispatch(setLoading(false))
     }
@@ -63,17 +59,20 @@ const handleGetChats=async()=>{
 
 const handleGetMessages=async(chatId:string)=>{
     try {
+        dispatch(setError(null))
         dispatch(setLoading(true))
 
         const res=await GetMessages(chatId)
         dispatch(setMessages(res.messages))
     }
-    catch(error){
-        dispatch(setError(error))
+    catch(error: any){
+        const message = error.response?.data?.message || error.message || "Failed to fetch messages"
+        dispatch(setError(message))
     }finally{
         dispatch(setLoading(false))
     }
 }
+
 
 return{
 handleSendMessage,

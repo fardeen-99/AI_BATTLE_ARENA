@@ -62,7 +62,7 @@ let history:any=null
 
 export const getChats=async(req:Request,res:Response)=>{
 
-const chats=await chatModel.find({userID:(req as any).user?.id})
+const chats=await chatModel.find({userID:(req as any).user?.id}).sort({createdAt: -1})
 
 res.status(200).json({
    message:"your chats fetched succesfully",

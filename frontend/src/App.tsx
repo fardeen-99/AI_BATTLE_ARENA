@@ -8,12 +8,17 @@ import Home from './features/chats/pages/Home'
 import Authinit from './features/auth/components/Authinit'
 import Applayout from './Applayout'
 import Chat from './features/chats/components/Chat'
+import Hero from './features/chats/pages/Hero'
 
 function App() {
 
 
 
 const router=createBrowserRouter([
+  {
+path:"/",
+element:<Hero/>
+  },
   {
     path:"/login",
     element:<Login/>
@@ -23,18 +28,18 @@ const router=createBrowserRouter([
     element:<Register/>
   },
   {
-    path:"/",
+    path:"/dashboard",
     element:
     <Protected>
       <Applayout/>
     </Protected>,
     children:[
       {
-        path:"/",
+        path:"/dashboard",
         element:<Home/>
       },
       {
-        path:"/chat/:id",
+        path:"/dashboard/chat/:id",
         element:<Chat/>
       }
     ]
