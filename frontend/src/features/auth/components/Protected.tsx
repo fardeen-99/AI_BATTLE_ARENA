@@ -12,4 +12,4 @@ const Protected=({children}:any)=>{
     return children
 }
 
-export default Protected
+export default Protected		
