@@ -31,20 +31,8 @@ const Chat = () => {
                 className="flex-1 overflow-y-auto pt-24 pb-32 px-4 md:px-0 custom-scrollbar scroll-smooth"
             >
                 <div className="max-w-4xl mx-auto space-y-12">
-                    <Answer messages={messages} />
-                    
-                    {loading && (
-                        <div className="space-y-6 animate-pulse px-4">
-                            <div className="flex items-center gap-3 text-[var(--color-accent-cyan)] text-[10px] font-black uppercase tracking-widest shadow-[var(--shadow-neon-cyan)] p-2 rounded-lg bg-white/5 w-fit">
-                                <Sparkles size={12} className="animate-spin-slow" />
-                                Neural Processor Thinking...
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="h-48 glass rounded-2xl animate-shimmer" />
-                                <div className="h-48 glass rounded-2xl animate-shimmer" />
-                            </div>
-                        </div>
-                    )}
+                    <Answer messages={messages} loading={loading}/>
+                
                 </div>
             </div>
 
@@ -72,4 +60,4 @@ const Chat = () => {
     )
 }
 
-export default Chat
+export default Chat

@@ -45,6 +45,11 @@ const chatSlice = createSlice({
     addmessage: (state, action: PayloadAction<any>) => {
       state.messages = [...state.messages, action.payload]
     },
+    updateLastMessage: (state, action: PayloadAction<any>) => {
+      if (state.messages.length > 0) {
+        state.messages[state.messages.length - 1] = action.payload
+      }
+    },
   },
 })
 
@@ -56,6 +61,7 @@ export const {
   setCurrentChat,
   addchat,
   addmessage,
+  updateLastMessage,
 } = chatSlice.actions
 
 export default chatSlice.reducer

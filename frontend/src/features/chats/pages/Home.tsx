@@ -7,7 +7,7 @@ import { Sparkles, Terminal, Cpu, Zap, ArrowRight } from "lucide-react"
 
 const Home = () => {
     const [message, setMessage] = useState<string>("")
-    const { currentChat } = useSelector((state: RootState) => state.chats)
+    const { currentChat,messages } = useSelector((state: RootState) => state.chats)
     const { handleSendMessage } = useChat()
 
     const suggestions = [
@@ -16,7 +16,7 @@ const Home = () => {
         { icon: <Cpu size={14} />, text: "Debate AI vs Humans" }
     ]
 
-    if (currentChat) {
+    if (messages.length > 0) {
         return <Chat />
     }
 
