@@ -1,4 +1,5 @@
 import { Cpu, User, ShieldAlert, BarChart3, Info, Sparkles } from "lucide-react"
+import { MarkdownRenderer } from "./MarkdownRenderer"
 
 interface messagesType {
     messages: {
@@ -28,12 +29,12 @@ const Answer = ({ messages,loading }: messagesType & loadingType) => {
                 <div key={message._id || index} className="space-y-8 animate-fade-in px-4">
                     {/* User Query Section */}
                     <div className="flex justify-end pr-2">
-                        <div className="max-w-[80%] bg-[var(--color-secondary-bg)] border border-white/10 p-5 rounded-2xl rounded-tr-none shadow-xl relative group">
+                        <div className="max-w-[90%] md:max-w-[80%] bg-[var(--color-secondary-bg)] border border-white/10 p-5 rounded-2xl rounded-tr-none shadow-xl relative group">
                             <div className="flex items-center gap-3 mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--color-accent-cyan)] opacity-70">
                                 <User size={12} />
                                 Master Input
                             </div>
-                            <p className="text-sm font-medium leading-relaxed">{message.problem}</p>
+                            <p className="text-sm font-medium  text-center leading-relaxed">{message.problem}</p>
                             <div className="absolute top-0 right-0 w-2 h-2 bg-[var(--color-accent-cyan)] shadow-[var(--shadow-neon-cyan)] -translate-y-1/2 translate-x-1/2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     </div>
@@ -60,8 +61,8 @@ const Answer = ({ messages,loading }: messagesType & loadingType) => {
                                             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--color-accent-cyan)]">Agent Alpha</h3>
                                             <ShieldAlert size={14} className="text-white/20 group-hover:text-[var(--color-accent-cyan)] transition-colors" />
                                         </div>
-                                        <div className="max-h-[300px] overflow-y-auto pr-2 custom-scrollbar text-sm leading-relaxed text-[var(--color-text-main)]/90">
-                                            {message.solution_1}
+                                        <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar text-sm leading-relaxed text-[var(--color-text-main)]/90">
+                                            <MarkdownRenderer content={message.solution_1} />
                                         </div>
                                     </div>
                                 </div>
@@ -74,16 +75,16 @@ const Answer = ({ messages,loading }: messagesType & loadingType) => {
                                             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--color-accent-magenta)]">Agent Beta</h3>
                                             <Cpu size={14} className="text-white/20 group-hover:text-[var(--color-accent-magenta)] transition-colors" />
                                         </div>
-                                        <div className="max-h-[300px] overflow-y-auto pr-2 custom-scrollbar text-sm leading-relaxed text-[var(--color-text-main)]/90">
-                                            {message.solution_2}
+                                        <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar text-sm leading-relaxed text-[var(--color-text-main)]/90">
+                                            <MarkdownRenderer content={message.solution_2} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             {message.AI_judgement && (
-                                <div className="grid grid-cols-1 gap-6">
-                                    <div className="md:col-span-2 bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3 relative group overflow-hidden">
+                                <div className="grid grid-cols-1 gap-6 pb-10">
+                                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3 relative group overflow-hidden">
                                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                             <Info size={48} />
                                         </div>
@@ -143,13 +144,12 @@ const Answer = ({ messages,loading }: messagesType & loadingType) => {
                                 <Sparkles size={12} className="animate-spin-slow" />
                                 Neural Processor Thinking...
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-10">
                                 <div className="h-48 glass rounded-2xl animate-shimmer" />
                                 <div className="h-48 glass rounded-2xl animate-shimmer" />
                             </div>
                         </div>
                     )}
-                    {/* AI Battle Section */}
                     
                 </div>
             ))}
@@ -158,3 +158,4 @@ const Answer = ({ messages,loading }: messagesType & loadingType) => {
 }
 
 export default Answer
+

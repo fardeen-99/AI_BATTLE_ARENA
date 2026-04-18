@@ -117,3 +117,8 @@ body, html, #root {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent-cyan);
 }
+
+.reveal-section {
+  opacity: 1 !important;
+  transform: none !important;
+}
