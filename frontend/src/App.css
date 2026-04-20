@@ -118,7 +118,46 @@ body, html, #root {
   background: var(--color-accent-cyan);
 }
 
+/* High-End Minimalist Scrollbar */
+/* ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020202;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold, #F59E0B);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+} */
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+  display: none;
+}
+/* 
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  border: transparent;
+} */
+
 .reveal-section {
   opacity: 1 !important;
   transform: none !important;
 }
+

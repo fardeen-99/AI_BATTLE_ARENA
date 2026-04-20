@@ -13,63 +13,65 @@ const Hero = () => {
     const battleRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        // --- PRE-LOAD REFRESH ---
+        // --- INITIAL REFRESH ---
+        // Ensure ScrollTrigger is ready after component mount
         ScrollTrigger.refresh();
 
         const tlIntro = gsap.timeline({ defaults: { ease: 'power4.out', duration: 1.5 } });
 
         // Initial Header Entrance
         tlIntro.from('header', { y: -50, opacity: 0 }, 0.2);
-        
+
         // Massive Background Typography Parallax
-        gsap.to('.massive-bg-text', { 
-            y: '-15%', 
+        // FIX: Using the hero section as the trigger instead of a fixed div
+        gsap.to('.massive-bg-text', {
+            y: '-10%',
             scrollTrigger: {
-                trigger: '.hero-trigger',
+                trigger: '.hero-content-section',
                 start: 'top top',
                 end: 'bottom top',
-                scrub: 1
+                scrub: true,
+                invalidateOnRefresh: true
             }
         });
 
-        tlIntro.from('.massive-bg-text', { opacity: 0, scale: 0.9, duration: 2.5 }, 0.1);
+        tlIntro.from('.massive-bg-text', {
+            opacity: 0,
+            scale: 0.8,
+            duration: 2.5,
+            ease: "expo.out"
+        }, 0.1);
 
         // Hero Content Staggered Reveal
-        tlIntro.from('.hero-main-title', { y: 40, opacity: 0, duration: 1.2 }, 0.5);
-        tlIntro.from('.hero-command-box', { scale: 0.95, opacity: 0, duration: 1, ease: "back.out(1.2)" }, 0.8);
-        tlIntro.from('.hero-main-desc', { y: 20, opacity: 0, duration: 1 }, 1.1);
-        
+        tlIntro.from('.hero-main-title', { y: 60, opacity: 0, duration: 1.4 }, 0.6);
+        tlIntro.from('.hero-command-box', { scale: 0.9, opacity: 0, duration: 1.2, ease: "back.out(1.5)" }, 0.9);
+        tlIntro.from('.hero-main-desc', { y: 30, opacity: 0, duration: 1 }, 1.3);
+
         // Ambient Light subtle animation
         gsap.to('.amber-light', {
-            opacity: 0.5,
-            scale: 1.05,
-            duration: 6,
+            opacity: 0.4,
+            scale: 1.1,
+            duration: 8,
             repeat: -1,
             yoyo: true,
             ease: "sine.inOut"
         });
 
-        // Responsive Reveal Logic (Staggered by group)
+        // Responsive Reveal Logic (Optimized for performance)
         const revealSections = gsap.utils.toArray('.reveal-section');
         revealSections.forEach((section: any) => {
             gsap.from(section, {
                 scrollTrigger: {
                     trigger: section,
-                    start: 'top 88%',
-                    toggleActions: 'play none none none',
-                    once: true,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse',
                 },
                 opacity: 0,
-                y: 30,
-                duration: 1,
-                ease: 'power2.out',
-                clearProps: "all"
+                y: 50,
+                duration: 1.2,
+                ease: 'expo.out',
             });
         });
-
-        // Handle dynamic layout shifts
-        window.addEventListener('resize', () => ScrollTrigger.refresh());
-        return () => window.removeEventListener('resize', () => ScrollTrigger.refresh());
 
     }, { scope: containerRef });
 
@@ -102,9 +104,9 @@ const Hero = () => {
         });
 
         if (battleRef.current) observer.observe(battleRef.current);
-        return () => { 
-            if (timer) clearTimeout(timer); 
-            observer.disconnect(); 
+        return () => {
+            if (timer) clearTimeout(timer);
+            observer.disconnect();
         };
     }, []);
 
@@ -124,10 +126,10 @@ const Hero = () => {
 
     return (
         <div ref={containerRef} className="min-h-screen bg-[#020202] font-sans selection:bg-[#F59E0B]/30 selection:text-[#F59E0B] text-[#F9F8F6] overflow-x-hidden antialiased">
-            
+
             {/* Background Base */}
-           <div className="fixed inset-0 bg-[#020202] -z-10" />
-            
+            <div className="fixed inset-0 bg-[#020202] -z-10" />
+
             {/* Ambient Grok-style Lighting (Burned Amber) */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="amber-light absolute top-[-20vh] right-[-20vw] w-[80vw] h-[100vh] bg-[radial-gradient(circle_at_center,_#F59E0B_0%,_transparent_70%)] opacity-20 blur-[150px]" />
@@ -152,20 +154,20 @@ const Hero = () => {
                                 <a key={link} href={`#${link.toLowerCase()}`} className="hover:text-white transition-all transform hover:-translate-y-0.5">{link}</a>
                             ))}
                         </div>
-                    <button 
-                        onClick={() => navigate("/login")}
-                        className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white border border-white/20 hover:border-white px-5 md:px-8 py-2 md:py-3 rounded-full transition-all hover:bg-white hover:text-black whitespace-nowrap"
-                    >
-                        Try Arena 3
-                    </button>
+                        <button
+                            onClick={() => navigate("/login")}
+                            className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white border border-white/20 hover:border-white px-5 md:px-8 py-2 md:py-3 rounded-full transition-all hover:bg-white hover:text-black whitespace-nowrap"
+                        >
+                            Try Arena 3
+                        </button>
                     </div>
                 </nav>
             </header>
 
             {/* Hero Section */}
-            <section className="relative min-h-[100dvh] flex flex-col items-center justify-center py-20 md:py-40 px-6 z-10">
+            <section className="hero-content-section relative min-h-[100dvh] flex flex-col items-center justify-center py-20 md:py-40 px-6 z-10">
                 <div className="max-w-5xl w-full text-center flex flex-col items-center">
-                    
+
                     <div className="hero-main-title flex flex-col items-center space-y-4 mb-8 md:mb-20">
                         <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-amber-500/80 mb-2 md:mb-4 animate-pulse">Standardized Intelligence Benchmark</span>
                         <h1 className="text-4xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black tracking-tighter leading-[0.9] md:leading-[0.85] text-white italic">
@@ -180,7 +182,7 @@ const Hero = () => {
                     <div className="hero-command-box relative w-full max-w-3xl group px-0 md:px-4">
                         <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                         <div className="relative bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-2xl md:rounded-3xl p-1 md:p-2 shadow-2xl transition-all hover:border-amber-500/30">
-                            <textarea 
+                            <textarea
                                 rows={2}
                                 value={quest}
                                 onChange={(e) => setQuest(e.target.value)}
@@ -199,7 +201,7 @@ const Hero = () => {
                                         <span className="hidden xs:inline">Live Judge</span>
                                     </div>
                                 </div>
-                                <button 
+                                <button
                                     onClick={handleQuestSend}
                                     className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white flex items-center justify-center text-black hover:bg-amber-500 transition-colors shadow-xl shrink-0"
                                 >
@@ -309,7 +311,7 @@ const Hero = () => {
             <section id="technology" className="reveal-section py-20 sm:py-32 md:py-40 px-6 relative z-10 bg-black min-h-[100dvh] flex items-center">
                 <div className="max-w-7xl mx-auto w-full">
                     <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:auto-rows-[300px]">
-                        
+
                         <div className="md:col-span-2 md:row-span-2 bg-[#050505] border border-white/5 rounded-[1.5rem] md:rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between group hover:border-amber-500/30 transition-all overflow-hidden relative min-h-[400px] md:min-h-0">
                             <div className="relative z-10 max-w-sm">
                                 <Shield className="text-amber-500 mb-6 md:mb-8 w-8 h-8 md:w-10 md:h-10" strokeWidth={1.5} />
@@ -347,7 +349,7 @@ const Hero = () => {
                                 </p>
                             </div>
                             <div className="flex gap-2">
-                                {[1,2,3].map(i => <div key={i} className="w-1 h-6 md:h-8 bg-zinc-800 rounded-full" />)}
+                                {[1, 2, 3].map(i => <div key={i} className="w-1 h-6 md:h-8 bg-zinc-800 rounded-full" />)}
                             </div>
                         </div>
                     </div>
@@ -364,7 +366,7 @@ const Hero = () => {
                     <p className="text-[10px] md:text-lg text-zinc-500 uppercase tracking-[0.3em] md:tracking-[0.4em] font-black mb-10 md:mb-16 italic">
                         The Arena waits for your most difficult questions.
                     </p>
-                    <button 
+                    <button
                         onClick={() => navigate("/dashboard")}
                         className="group relative inline-flex items-center justify-center px-10 md:px-16 py-4 md:py-6 font-black text-[8px] md:text-[10px] uppercase tracking-[0.4em] text-black bg-white rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
                     >
