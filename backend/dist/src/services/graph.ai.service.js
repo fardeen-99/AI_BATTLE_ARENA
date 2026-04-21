@@ -17,6 +17,7 @@ const internetTool = tool(InternetSearch, {
     }),
     description: "Search the internet for real-time information, news, prices, and facts. Returns a clear text summary with a 'Direct Answer' and 'Top Search Results'.",
 });
+// first we set the state!!
 const state = new StateSchema({
     problem: z.string().default(""),
     solution_1: z.string().default(""),
