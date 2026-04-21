@@ -1,7 +1,5 @@
 import { Outlet } from "react-router-dom"
 import Sidebar from "./features/chats/components/Sidebar"
-import { Menu } from "lucide-react"
-import { useState } from "react"
 
 const Applayout = () => {
     // We'll use a CSS-only or simple event system, but for now let's just use a top bar
@@ -24,4 +22,4 @@ const Applayout = () => {
     )
 }
 
-export default Applayout
+export default Applayout

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Check, Copy, Share, Download, RotateCcw, ThumbsUp, ThumbsDown, MoreHorizontal } from 'lucide-react';
+import { Check, Copy} from 'lucide-react';
 
 interface CodeBlockProps {
   language: string;

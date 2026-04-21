@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { ArrowRight, Zap, Target, Activity, Cpu, Globe, Shield, Sparkles, Scale, AlertTriangle, CheckCircle2, Code2, MoveDown, Quote } from 'lucide-react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { ArrowRight, Zap, Target, Activity, Cpu, Shield, MoveDown, Quote } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -7,10 +7,59 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// const HEADER_HEIGHT = 80; // px offset so sections land perfectly below the fixed header
+
 const Hero = () => {
     const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement>(null);
     const battleRef = useRef<HTMLDivElement>(null);
+
+    // Section refs for smooth scroll navigation
+    const heroSectionRef = useRef<HTMLElement>(null);
+    const labSectionRef = useRef<HTMLElement>(null);
+    const manifestoSectionRef = useRef<HTMLElement>(null);
+    const intelligenceSectionRef = useRef<HTMLElement>(null);
+    const ctaSectionRef = useRef<HTMLElement>(null);
+
+    // Scroll-based header blur state
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    // Nav link → section ref mapping
+    const navConfig: Record<string, React.RefObject<HTMLElement | null>> = {
+        Platform: heroSectionRef,
+        Technology: labSectionRef,
+        Archives: manifestoSectionRef,
+        Intelligence: intelligenceSectionRef,
+        Truth: ctaSectionRef,
+    };
+
+    // Smooth scroll handler – scrolls so the section's top aligns right below the header
+   const scrollToSection = useCallback((ref: React.RefObject<HTMLElement | null>) => {
+    if (!ref?.current) {
+        console.log("❌ ref not found");
+        return;
+    }
+
+    const element = ref.current;
+
+    // 🔥 FORCE SCROLL (better than window.scrollTo)
+    element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+
+}, []);
+
+    // Listen for scroll to toggle header blur
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPos = window.scrollY || document.documentElement.scrollTop;
+            setIsScrolled(scrollPos > 20);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // set initial state
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useGSAP(() => {
         // --- INITIAL REFRESH ---
@@ -143,15 +192,31 @@ const Hero = () => {
                 </span>
             </div>
 
-            <header className="fixed top-0 left-0 right-0 z-50 py-4 sm:py-6 md:py-8 px-4 sm:px-8 md:px-16 backdrop-blur-md bg-black/10 border-b border-white/5 lg:bg-transparent lg:border-none lg:backdrop-blur-none mix-blend-difference">
-                <nav className="max-w-7xl mx-auto flex items-center justify-between">
+            <header
+                className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 md:px-16 transition-all duration-500 ease-in-out ${
+                  isScrolled
+  ? 'py-3 sm:py-4 backdrop-blur-xl supports-[backdrop-filter]:bg-black/40 bg-black/60 border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)]'
+  : 'py-4 sm:py-6 md:py-8 bg-transparent border-transparent'
+                }`}
+            >
+                <nav className="max-w-7xl z-100 mx-auto flex items-center justify-between">
                     <div className="flex items-center justify-between w-full gap-4 md:gap-12">
                         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
                             <span className="font-bold text-lg md:text-xl tracking-tight text-white uppercase italic">a1.arena</span>
                         </div>
                         <div className="hidden lg:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">
-                            {['Platform', 'Technology', 'Archives', 'Intelligence', 'News'].map(link => (
-                                <a key={link} href={`#${link.toLowerCase()}`} className="hover:text-white transition-all transform hover:-translate-y-0.5">{link}</a>
+                            {(['Platform', 'Technology', 'Archives', 'Intelligence', 'Truth'] as const).map(link => (
+                                <button
+                                    key={link}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection(navConfig[link]);
+                                        console.log("helll")
+                                    }}
+                                    className="hover:text-white transition-all transform hover:-translate-y-0.5 cursor-pointer bg-transparent border-none outline-none"
+                                >
+                                    {link}
+                                </button>
                             ))}
                         </div>
                         <button
@@ -164,8 +229,8 @@ const Hero = () => {
                 </nav>
             </header>
 
-            {/* Hero Section */}
-            <section className="hero-content-section relative min-h-[100dvh] flex flex-col items-center justify-center py-20 md:py-40 px-6 z-10">
+            {/* Hero Section — "Platform" navigates here */}
+            <section ref={heroSectionRef} className="hero-content-section relative min-h-[100dvh] flex flex-col items-center justify-center py-20 md:py-40 px-6 z-10">
                 <div className="max-w-5xl w-full text-center flex flex-col items-center">
 
                     <div className="hero-main-title flex flex-col items-center space-y-4 mb-8 md:mb-20">
@@ -222,8 +287,8 @@ const Hero = () => {
                 </div>
             </section>
 
-            {/* The Manifesto Section */}
-            <section className="reveal-section py-20 sm:py-32 md:py-40 min-h-[60vh] md:min-h-[100dvh] px-6 border-y border-white/5 relative z-10 bg-[#020202] flex items-center">
+            {/* The Manifesto Section — "Archives" navigates here */}
+            <section ref={manifestoSectionRef} className="reveal-section py-20 sm:py-32 md:py-40 min-h-[60vh] md:min-h-[100dvh] px-6 border-y border-white/5 relative z-10 bg-[#020202] flex items-center">
                 <div className="max-w-4xl mx-auto text-center">
                     <Quote className="text-amber-500/20 w-10 h-10 md:w-16 md:h-16 mx-auto mb-8 md:mb-12" />
                     <h2 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-serif italic text-white leading-relaxed md:leading-tight mb-8 md:mb-12 px-2">
@@ -236,8 +301,8 @@ const Hero = () => {
                 </div>
             </section>
 
-            {/* The Lab (Active Battle Preview) */}
-            <section id="platform" className="reveal-section py-20 sm:py-32 md:pb-40 md:pt-30 px-4 sm:px-6 relative z-10 min-h-[100dvh] flex flex-col justify-center">
+            {/* The Lab (Active Battle Preview) — "Technology" navigates here */}
+            <section ref={labSectionRef} className="reveal-section py-20 sm:py-32 md:pb-40 md:pt-30 px-4 sm:px-6 relative z-10 min-h-[100dvh] flex flex-col justify-center">
                 <div className="max-w-7xl mx-auto w-full">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 mb-12 md:mb-20">
                         <div className="max-w-xl">
@@ -307,8 +372,8 @@ const Hero = () => {
                 </div>
             </section>
 
-            {/* The Intelligence Grid */}
-            <section id="technology" className="reveal-section py-20 sm:py-32 md:py-40 px-6 relative z-10 bg-black min-h-[100dvh] flex items-center">
+            {/* The Intelligence Grid — "Intelligence" navigates here */}
+            <section ref={intelligenceSectionRef} className="reveal-section py-20 sm:py-32 md:py-40 px-6 relative z-10 bg-black min-h-[100dvh] flex items-center">
                 <div className="max-w-7xl mx-auto w-full">
                     <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:auto-rows-[300px]">
 
@@ -356,8 +421,8 @@ const Hero = () => {
                 </div>
             </section>
 
-            {/* Final CTA */}
-            <section className="reveal-section py-24 sm:py-32 md:py-38 px-6 relative z-10 overflow-hidden text-center min-h-[80vh] md:min-h-[100dvh] flex items-center">
+            {/* Final CTA — "Truth" navigates here */}
+            <section ref={ctaSectionRef} className="reveal-section py-24 sm:py-32 md:py-38 px-6 relative z-10 overflow-hidden text-center min-h-[80vh] md:min-h-[100dvh] flex items-center">
                 <div className="absolute inset-0 bg-[#F59E0B]/5 blur-[200px] pointer-events-none" />
                 <div className="max-w-4xl mx-auto w-full">
                     <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black text-white italic tracking-[1px] mb-8 md:mb-12">

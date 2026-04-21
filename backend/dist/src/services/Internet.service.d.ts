@@ -1,0 +1,2 @@
+export declare const InternetSearch: ({ query }: any) => Promise<"No search query provided." | "No relevant information found on the internet for this query." | import("@tavily/core").TavilySearchResponse | "An error occurred while searching the internet.">;
+//# sourceMappingURL=Internet.service.d.ts.map

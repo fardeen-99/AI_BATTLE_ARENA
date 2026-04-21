@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../../store/store";
 import Chat from "../components/Chat";
 import useChat from "../hooks/chat.hook";
-import { Sparkles, Terminal, Cpu, Zap, ArrowRight, ShieldAlert, Crosshair, Activity } from "lucide-react";
+import { Sparkles, Terminal, Cpu, Zap, ArrowRight, Crosshair, Activity } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
